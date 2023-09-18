@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ElNotification } from 'element-plus'
 
 const service = axios.create({
-  baseURL: '/micro_question_answer_admin_war',
+  baseURL: '/auto_sw_admin_war',
   timeout: 30000
 })
 

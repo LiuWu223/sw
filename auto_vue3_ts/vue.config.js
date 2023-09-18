@@ -11,7 +11,7 @@ module.exports = defineConfig({
     // 代理配置
     proxy: {
       // /代表所有请求连接代理到http://127.0.0.1:8080这个链接
-      '/micro_question_answer_admin_war': {
+      '/auto_sw_admin_war': {
         // 代理目标
         target: 'http://127.0.0.1:8080',
         // 是否变更来源
