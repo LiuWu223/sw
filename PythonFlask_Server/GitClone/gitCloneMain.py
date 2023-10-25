@@ -1,24 +1,57 @@
-import subprocess
 from flask import Blueprint, jsonify, request, abort
+from socketSocketFun import socketFun
 
 module_gitToolMain = Blueprint('gitTool', __name__)
 
+""""
+git项目克隆接口
+return 无
+"""
+
 
 @module_gitToolMain.route('/gitTool/gitClone', methods=['POST'])
-def getClone():
-    userPath = 'D:/CA410'
-    data = request.get_json()
-    userGitPath = data.get('gitPath')
+def gitClone():
+    userData = request.get_json()
+    ip = userData.get('ip')
+    gitPath = userData.get('gitPath')
+    cmd = 'git clone' + ' ' + gitPath
+    socketFun.socketSocket(ip, cmd)
+    return jsonify(success=True, message='获取成功！'), 200
 
-    # 判断连接是否在git列表
-    gitPathList = ['https://github.com/LiuWu223/myRepository.git']
-    if userGitPath not in gitPathList:
-        return abort(400, "下载失败，请检查git地址是否有效！！")
-    try:
-        command = ['git', 'clone', userGitPath]
-        subprocess.check_call(command, cwd='{}'.format(userPath))
-    except subprocess.CalledProcessError as cpe:
-        print(cpe)
-        if 'returned non-zero exit status 128' in str(cpe):
-            return abort(400,"目录已存在相同文件，请删除后重试！！！")
-    return jsonify(sussccInfo='下载成功'), 200
+
+""""
+git项目断言是否存在
+return True OR False
+"""
+
+
+@module_gitToolMain.route('/gitTool/assertGitFile', methods=['POST'])
+def assertGitFile():
+    userData = request.get_json()
+    ip = userData.get('ip')
+    fileName = userData.get('fileName')
+    cmd = 'dir'
+    assertData = socketFun.socketSocket(ip, cmd).split('\n')[5:-1]
+    for i in assertData:
+        if fileName == i.rsplit(' ', 1)[1]:
+            return jsonify(success=True, message='获取成功！'), 200
+    return jsonify(success=False, message='获取成功失败'), 200
+
+
+""""
+启动项目接口
+return 无
+"""
+
+
+@module_gitToolMain.route('/gitTool/cmPath', methods=['POST'])
+def cmPath():
+    userData = request.get_json()
+    ip = userData.get('ip')
+    fileName = userData.get('fileName')
+    path = str(userData.get('path')).replace('=', '\\')
+    cmd = 'start cmd /k ' + path + '\\' + fileName + '\\' + 'run.bat'
+    print(cmd)
+    assertData = socketFun.socketSocket(ip, cmd)
+    print(assertData)
+    return jsonify(success=True, message='1111'), 200

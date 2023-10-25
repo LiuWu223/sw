@@ -21,6 +21,7 @@ app.register_blueprint(module_appError)
 # 引入客户端
 app.register_blueprint(module_socketServer)
 
+
 @app.route('/', methods=['GET'])
 def hello_world():
     if Response.status_code != 200:
@@ -39,7 +40,7 @@ def result(param, param1):
 #     if url in passUrl:
 #         pass
 #     else:
-#         _id = session.get("_id", None)
+#         _id = session.get("Authorization", None)
 #         print(session)
 #         if not _id:
 #             return result(203, {"info": "未登录"})
@@ -47,4 +48,4 @@ def result(param, param1):
 #             pass
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+    app.run(host='182.168.3.85', debug=False, port=5000)
