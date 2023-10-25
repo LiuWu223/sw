@@ -6,19 +6,6 @@
 
 <script lang="ts" setup>
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-// import { watch } from 'vue'
-// import router from '@/router'
-// import { userLoginApi } from '@/api/systemApi/login-api'
-// import jwtDecode from 'jwt-decode'
-// import { ElMessage } from 'element-plus'
-// watch(
-//   () => router.currentRoute.value,
-//   async (newValue) => {
-//     if (newValue.path === '/') {
-//       console.log(11)
-//     }
-//   }
-// )
 </script>
 
 <style lang="scss">

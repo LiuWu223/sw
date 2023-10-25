@@ -11,27 +11,20 @@
           <span>登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</span>
           <el-form :model="loginForm" style="margin-top:20px">
             <el-form-item prop="userAccount">
-              <el-input v-model="loginForm.userAccount" size="large" placeholder="请输入用户登录账号" :prefix-icon="User" />
+              <el-input v-model="loginForm.userAccount" size="large" placeholder="账号" :prefix-icon="User" />
             </el-form-item>
             <el-form-item prop="userPassword">
-              <el-input v-model="loginForm.userPassword" type="password" size="large" placeholder="请输入用户登录密码" :prefix-icon="Lock" />
+              <el-input v-model="loginForm.userPassword" type="password" size="large" placeholder="密码" :prefix-icon="Lock" />
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-checkbox v-model="loginForm.remember" label="记住密码" size="large" />
               <el-checkbox v-model="loginForm.noLogin" label="两周内免登录" size="large" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
-              <div></div>
               <el-button type="primary" size="large" style="width: 100%;" @click="login"><p v-if="!logdings">登&nbsp;&nbsp;录</p><i v-if="logdings" class="loading"></i></el-button>
             </el-form-item>
             <el-form-item>
               <el-row justify="space-between" style="width: 100%;">
-                <!-- 测试 -->
-                <div>
-                  <button @click="adbDevices">获取adb设备</button>
-                  <button @click="gitClone">下载到服务器</button>
-                  <input v-model="gitPath" type="text" placeholder="请输入git代码地址" />
-                </div>
               </el-row>
             </el-form-item>
           </el-form>
@@ -42,78 +35,73 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onUnmounted } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ElNotification, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+/** 引入防抖函数 */
 import { useDebounce } from '@/utils/debounce'
-// 引入请求后端封装的API
-import { userLoginApi } from '@/api/systemApi/login-api'
-// ==========================================
-const adbDevices = () => {
-  const a = userLoginApi.adbDevices()
-  console.log(a)
-}
-const gitPath = ref('')
-
-const gitClone = () => {
-  const paths = {
-    gitPath: gitPath.value
-  }
-  const a = userLoginApi.gitClone(paths)
-  console.log(a)
-}
-// ===========================
+/** 登录接口 */
+import { syUserApi, loginParam } from '@/api/syApi/syUser-api'
+import jwtDecode from 'jwt-decode'
+/** 实例路由 */
 const router = useRouter()
-const loginForm = reactive({
+const keyDown = (e) => {
+  if (e.code === 'Enter') {
+    login()
+  }
+}
+window.addEventListener('keydown', keyDown)
+/** 登录用户表单 */
+const loginForm = reactive<loginParam>({
   userAccount: '',
-  userPassword: '',
-  remember: false,
-  noLogin: false
+  userPassword: ''
 })
 // 登录加载动画
 const logdings = ref(false)
 // 登录函数
 const toHomes = async () => {
   if (loginForm.userAccount === '') {
-    ElNotification({
-      title: 'Error',
+    ElMessage({
       message: '请输入账号！',
-      type: 'error',
-      position: 'bottom-right'
+      type: 'error'
     })
     return
   } else if (loginForm.userPassword === '') {
-    ElNotification({
-      title: 'Error',
+    ElMessage({
       message: '请输入密码！',
-      type: 'error',
-      position: 'bottom-right'
+      type: 'error'
     })
     return
   }
-  // 用户输入账号密码
-  const userList = {
-    userAccount: loginForm.userAccount,
-    userPassword: loginForm.userPassword
-  }
+
   if (logdings.value === false) { logdings.value = true }
   // 调用登录接口
-  await userLoginApi.loginUser(userList).then(userRes => {
-    // 判断登录成功
-    if (userRes.data.code === 1016) {
+  await syUserApi.login(loginForm).then(loginRes => {
+    // 判断登录成功)
+    if (loginRes.data.code === 1017) {
+      ElMessage({
+        message: loginRes.data.message,
+        type: 'error'
+      })
+    }
+    if (loginRes.data.success) {
       // 将token保存到浏览器
       localStorage.setItem(
-        'Authorization', userRes.data.data.Authorization
+        'Authorization', loginRes.data.data.Authorization
       )
+      const token:any = jwtDecode(window.localStorage.getItem('Authorization'))
       // 跳转到首页
-      router.push({
-        name: 'IndexView',
-        replace: true
-      }).catch(err => {
-        console.log(err)
-        ElMessage.error('无法跳转到首页')
-      })
+      if (token.user.roleId < 2) {
+        router.push({
+          name: 'IndexView',
+          replace: true
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        location.reload()
+      }
       if (logdings.value === true) { logdings.value = false }
     } else {
       if (logdings.value === true) { logdings.value = false }
@@ -121,9 +109,15 @@ const toHomes = async () => {
   }).catch(error => {
     // 登录错误处理
     if (logdings.value === true) { logdings.value = false }
-    console.log(error)
+    ElMessage({
+      message: error,
+      type: 'warning'
+    })
   })
 }
+onUnmounted(() => {
+  window.removeEventListener('keydown', keyDown, false)
+})
 // 防抖函数的使用
 const login = useDebounce(toHomes, 1000)
 </script>
@@ -144,13 +138,6 @@ const login = useDebounce(toHomes, 1000)
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
-// .loading {
-//   width: 40px;
-//   height: 40px;
-//   margin: auto;
-//   // top: 525px;
-//   position: absolute;
-// }
 .loading::before {
   content: "";
   width: 4px;

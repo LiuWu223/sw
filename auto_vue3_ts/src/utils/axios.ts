@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 const service = axios.create({
   baseURL: '/auto_sw_admin_war',
@@ -12,6 +12,13 @@ const service = axios.create({
  *      2、可以在此处添加请求头、身份验证等
  */
 service.interceptors.request.use((config: AxiosRequestConfig | any) => {
+  if (config.url === '/common/upload/single') {
+    config.headers = {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('Authorization')
+    }
+    return config
+  }
   // <此处可以对数据进行处理>
   config.headers = {
     'Content-Type': 'application/json',
@@ -30,24 +37,24 @@ service.interceptors.request.use((config: AxiosRequestConfig | any) => {
  */
 service.interceptors.response.use((response: AxiosResponse) => {
   // <此处可以对数据进行处理>
-  console.log(response)
-  if (response.status === 200) {
-    if (response.data.success === false) {
-      ElNotification({
-        title: 'Error',
-        message: response.data.message,
-        type: 'error',
-        duration: 1000
-      })
-    } else {
-      ElNotification({
-        title: 'Success',
-        message: response.data.message,
-        type: 'success',
-        duration: 1000
-      })
-    }
-  }
+  // console.log(response)
+  // if (response.status === 200) {
+  //   if (response.data.success === false) {
+  //     ElNotification({
+  //       title: 'Error',
+  //       message: response.data.message,
+  //       type: 'error',
+  //       duration: 1000
+  //     })
+  //   } else {
+  //     ElNotification({
+  //       title: 'Success',
+  //       message: response.data.message,
+  //       type: 'success',
+  //       duration: 1000
+  //     })
+  //   }
+  // }
   return response
 }, (error) => {
   console.log(error)
@@ -63,11 +70,9 @@ service.interceptors.response.use((response: AxiosResponse) => {
   //     errorInfo += char
   //   })
   // }
-  ElNotification({
-    title: 'Error',
+  ElMessage({
     message: error.message,
-    type: 'error',
-    duration: 2500
+    type: 'error'
   })
   return Promise.resolve(error)
 })

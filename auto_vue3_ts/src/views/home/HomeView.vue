@@ -1,15 +1,18 @@
 <template>
   <el-container class="home">
-    <el-aside class="home-aside" :width="asideWidth">
-      <div class="home-logo">
-        <img src="../../assets/images/icon1.png" />
-        <span v-show="!isCollapseMenu"><p style="color: aliceblue;font-weight: 500;font-size: 14px;margin-left: 5px;">测试平台</p></span>
+    <el-aside class="home-aside">
+      <div @click="router.push({
+        name: 'UserAppHome',
+        replace: true })" class="home-logo">
+        <img :style="icon1Style" src="../../assets/images/icon1.png" />
+        <transition name="el-zoom-in-center">
+          <span v-show="!isCollapse"><p style="color: aliceblue;font-weight: 500;font-size: 14px;margin-left: 5px;">测试平台</p></span>
+        </transition>
       </div>
       <el-menu
+        :collapse="isCollapse"
         router
         unique-opened
-        :collapse="isCollapseMenu"
-        :collapse-transition="false"
         class="home-menu"
         :default-active="$route.path"
       >
@@ -22,7 +25,7 @@
             <el-icon ><component :is='i.meta.icon'/></el-icon>
             <span>{{ i.meta.label }}</span>
           </template>
-          <el-menu-item v-for="it in i.children" :key="it.path" :index="i.path + '/' + it.path">{{it.meta.label}}</el-menu-item>
+          <el-menu-item v-for="childeren in i.children" :key="childeren.path" :index="i.path + '/' + childeren.path">{{childeren.meta.label}}</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-aside>
@@ -33,17 +36,15 @@
             <el-button
               type="primary"
               :icon="collapseIcon"
-              style="transform: rotate(180deg);background-color: #ffffff00;border: none;"
+              style="background-color: #ffffff00;border: none;"
               @click="collapseMenu"
             />
           </el-col>
           <el-col :span="20" style="text-align: right">
-            <el-button type="primary" :icon="Bell" />
-            <el-button type="primary" :icon="Lock" />
             <el-dropdown>
               <el-button type="primary">
                 <template #default>
-                  <el-avatar :size="25" :src="'micro_question_answer_admin_war' + userAvatar" />&nbsp;&nbsp;
+                  <el-avatar :size="25" :src="'auto_sw_admin_war' + userAvatar" />&nbsp;&nbsp;
                   <span>{{ userName }}</span>
                 </template>
               </el-button>
@@ -115,8 +116,6 @@ import {
   SwitchButton
 } from '@element-plus/icons-vue'
 
-const asideWidth = ref('200px')
-const isCollapseMenu = ref(false)
 const collapseIcon = shallowRef(Fold)
 // 创建home的tab路由对象
 interface HomeTab {
@@ -133,12 +132,14 @@ const tabs = ref<HomeTab[]>([
   }
 ])
 const router = useRouter()
-// 解析localStorage里面的token
+
 const tokens:any = jwtDecode(localStorage.getItem('Authorization'))
-const userName = ref(tokens.systemUser.userName)
-const userAvatar = ref(tokens.systemUser.userAvatar)
+const userName = ref(tokens.user.userName)
+const userAvatar = ref(tokens.user.userAvatar)
+
 // filter过滤出子路由中对页面渲染的结果
 const pathList = router.getRoutes().filter(v => v.meta.isShow)
+console.log(pathList)
 // 监听器 用来监听路由是否发生变化
 watch(
   () => router.currentRoute.value,
@@ -159,16 +160,18 @@ watch(
   },
   { immediate: true }
 )
+const icon1Style = ref()
+const isCollapse = ref(true)
 // 菜单栏收起
 const collapseMenu = () => {
-  if (isCollapseMenu.value) {
-    isCollapseMenu.value = false
-    asideWidth.value = '250px'
-    collapseIcon.value = Fold
-  } else {
-    isCollapseMenu.value = true
-    asideWidth.value = '64px'
+  if (isCollapse.value) {
+    isCollapse.value = false
     collapseIcon.value = Expand
+    icon1Style.value = 'position: inherit;'
+  } else {
+    isCollapse.value = true
+    collapseIcon.value = Fold
+    icon1Style.value = 'position: absolute;'
   }
 }
 // 保存tab的所有页面路径
@@ -224,9 +227,16 @@ const exitLogin = () => {
 </script>
 
 <style scoped lang="scss">
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 250px;
+}
 .container {
   position: relative;
   padding: 0;
+}
+.el-aside{
+  width: auto;
 }
 .home {
   height: 100vh;
@@ -249,6 +259,10 @@ const exitLogin = () => {
       }
     }
     .home-menu {
+      height: calc(100vh - 50px);
+    }
+    .home-menu:not(.el-menu--collapse) {
+      width: 250px;
       height: calc(100vh - 50px);
     }
   }
@@ -294,6 +308,9 @@ const exitLogin = () => {
 </style>
 
 <style lang="scss">
+.home-main .el-tabs--card > .el-tabs__header .el-tabs__nav{
+  border-left: none;
+}
 .home-main {
   .el-tabs__header {
     margin: 0 !important;
@@ -301,14 +318,5 @@ const exitLogin = () => {
   .el-tabs--card > .el-tabs__header .el-tabs__nav {
     border-radius: 0 !important;
   }
-}
-.fang-enter-from{
-  transform: translateX(-100%);
-}
-.fang-enter-to{
-  transform: translateX(0);
-}
-.fang-enter-active{
-  transition: 0.5s ease;
 }
 </style>

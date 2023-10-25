@@ -13,6 +13,7 @@ import 'element-plus/theme-chalk/el-message-box.css'
 import 'element-plus/theme-chalk/el-drawer.css'
 
 const app = createApp(App)
+
 // 动态icon
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
