@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsCaseStepMapper">
+    <!-- 分页查询测试用例步骤信息 -->
+    <select id="pageCaseStep" resultType="com.lw.swTest.ts.entity.TsCaseStep">
+        SELECT *
+        FROM ts_case_step
+        WHERE ts_case_step.delete_flag = 0
+        <if test="stepContent != null">
+            AND ts_case_step.step_content LIKE CONCAT('%', #{stepContent}, '%')
+        </if>
+    </select>
+</mapper>

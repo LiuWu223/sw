@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyRoleMapper">
+    <!--  根据名称查询角色信息  -->
+    <select id="selectRoleName" resultType="com.lw.swTest.sy.entity.SyRole">
+        SELECT *
+        FROM sy_role
+        WHERE sy_role.delete_flag = 0
+          AND sy_role.role_name = #{roleName}
+    </select>
+
+    <!-- 分页查询角色信息 -->
+    <select id="pageRole" resultType="com.lw.swTest.sy.entity.SyRole">
+        SELECT *
+        FROM sy_role
+        WHERE sy_role.delete_flag = 0
+        <if test="roleName != null">
+            AND sy_role.role_name LIKE CONCAT('%', #{roleName}, '%')
+        </if>
+        <if test="roleCode != null">
+            AND sy_role.role_code LIKE CONCAT('%', #{roleCode}, '%')
+        </if>
+    </select>
+
+    <!-- 分页查询角色信息 -->
+    <select id="selectRoleByName" resultType="com.lw.swTest.sy.entity.SyRole">
+        SELECT *
+        FROM sy_role
+        WHERE sy_role.delete_flag = 0 AND sy_role.role_name = #{roleName}
+    </select>
+</mapper>

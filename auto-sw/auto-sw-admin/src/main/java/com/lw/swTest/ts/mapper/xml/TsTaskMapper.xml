@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsTaskMapper">
+    <!--  根据名称查询任务信息  -->
+    <select id="selectTaskName" resultType="com.lw.swTest.ts.entity.TsTask">
+        SELECT *
+        FROM ts_task
+        WHERE ts_task.delete_flag = 0
+          AND ts_task.task_name = #{taskName}
+    </select>
+
+    <!-- 分页查询任务信息 -->
+    <select id="pageTask" resultType="com.lw.swTest.ts.entity.TsTask">
+        SELECT *
+        FROM ts_task
+        WHERE ts_task.delete_flag = 0
+        <if test="taskName != null">
+            AND ts_task.task_name LIKE CONCAT('%', #{taskName}, '%')
+        </if>
+    </select>
+
+    <select id="getTaskTimiTNoe" resultType="com.lw.swTest.ts.entity.TsTask">
+        SELECT *
+        FROM ts_task
+        WHERE ts_task.delete_flag = 0
+        ORDER BY ts_task.create_time DESC LIMIT 1
+    </select>
+
+    <!--  查询项目任务  -->
+    <select id="selectTaskById" resultType="com.lw.swTest.ts.entity.TsTask">
+        SELECT tt.id,
+               tt.task_name,
+               tt.task_type,
+               tt.devices,
+               sdType.dict_content as dictIdType,
+               sdFirst.dict_content as dictIdFirst,
+               tt.tripartite,
+               tt.create_by,
+               tt.create_time,
+               tt.update_time,
+               tt.update_by,
+               tpt.id as taskProjectId
+        FROM ts_task as tt
+        JOIN sy_dict as sdFirst
+          ON tt.dict_id_first = sdFirst.id
+        JOIN sy_dict as sdType
+          ON tt.dict_id_type = sdType.id
+        JOIN ts_project_task as tpt
+        ON tpt.task_id = tt.id
+        WHERE tt.id=#{taskId}
+    </select>
+</mapper>

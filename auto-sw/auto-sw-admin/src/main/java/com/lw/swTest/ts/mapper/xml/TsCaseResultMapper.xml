@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsCaseResultMapper">
+    <!-- 分页查询测试用例预期结果信息 -->
+    <select id="pageCaseResult" resultType="com.lw.swTest.ts.entity.TsCaseResult">
+        SELECT *
+        FROM ts_case_result
+        WHERE ts_case_result.delete_flag = 0
+        <if test="resultContent != null">
+            AND ts_case_result.result_content LIKE CONCAT('%', #{resultContent}, '%')
+        </if>
+    </select>
+</mapper>

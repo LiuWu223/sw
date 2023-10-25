@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyRoleAuthorityMapper">
+    <!-- 分页查询角色路由信息 -->
+    <select id="pageRoleAuthority" resultType="com.lw.swTest.sy.entity.SyRoleAuthority">
+        SELECT
+        ra.id, ra.role_id, ra.authority_id, rol.role_name,d.dict_content,a.authority_name,a.authority_url,a.authority_refer,a.dict_id,ra.create_time,ra.create_by,ra.update_time,ra.update_by,ra.delete_flag
+        FROM sy_role rol
+        JOIN sy_role_authority ra
+        ON ra.role_id=rol.id
+        JOIN sy_authority a
+        ON ra.authority_id=a.id
+        JOIN sy_dict d
+        ON a.dict_id=d.id
+        WHERE
+        ra.delete_flag=0
+        AND
+        rol.delete_flag=0
+        AND
+        a.delete_flag=0
+        <if test="authorityName != null">
+            AND a.authority_name LIKE CONCAT('%', #{authorityName}, '%')
+        </if>
+        <if test="roleName != null">
+            AND rol.role_name LIKE CONCAT('%', #{roleName}, '%')
+        </if>
+    </select>
+</mapper>

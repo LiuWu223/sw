@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- 主项目包 -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.lw</groupId>
+  <artifactId>auto-sw</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <!-- 项目模块 -->
+  <modules>
+    <module>auto-sw-admin</module>
+  </modules>
+  <!-- 主项目信息 -->
+  <packaging>pom</packaging>
+  <name>auto-sw</name>
+  <url>http://maven.apache.org</url>
+  <!-- 项目属性配置 -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- 配置项目的JDK源构建版本 -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <!-- 配置项目的JDK目标构建版本 -->
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+  <!-- 主项目依赖包 -->
+  <dependencies>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.2</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>

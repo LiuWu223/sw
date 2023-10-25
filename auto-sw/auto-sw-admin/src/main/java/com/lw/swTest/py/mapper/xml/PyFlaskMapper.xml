@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.py.mapper.PyFlaskMapper">
+    <!--  根据名称查询flask信息  -->
+    <select id="selectFlaskName" resultType="com.lw.swTest.py.entity.PyFlask">
+        SELECT *
+        FROM py_flask
+        WHERE py_flask.delete_flag = 0
+          AND py_flask.flask_name = #{flaskName}
+    </select>
+
+    <!-- 分页查询flask信息 -->
+    <select id="pageFlask" resultType="com.lw.swTest.py.entity.PyFlask">
+        SELECT *
+        FROM py_flask
+        WHERE py_flask.delete_flag = 0
+        <if test="flaskName != null">
+            AND py_flask.flask_name LIKE CONCAT('%', #{flaskName}, '%')
+        </if>
+    </select>
+</mapper>

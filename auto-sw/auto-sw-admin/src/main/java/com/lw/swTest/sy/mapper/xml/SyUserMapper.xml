@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyUserMapper">
+    <!--  根据账号查询用户信息  -->
+    <select id="selectUserName" resultType="com.lw.swTest.sy.entity.SyUser">
+        SELECT *
+        FROM sy_user
+        WHERE sy_user.delete_flag = 0
+        AND sy_user.user_account = #{userAccount}
+    </select>
+
+    <!-- 分页查询用户信息 -->
+    <select id="pageUser" resultType="com.lw.swTest.sy.entity.SyUser">
+        SELECT u.*,d.dict_content,role.role_name
+        FROM sy_user u
+        JOIN sy_dict d
+        ON u.dict_id = d.id
+        JOIN sy_user_role sur
+        ON sur.user_id=u.id
+        JOIN sy_role role
+        ON sur.role_id=role.id
+        WHERE u.delete_flag = 0
+        <if test="userName != null">
+            AND u.user_name LIKE CONCAT('%', #{userName}, '%')
+        </if>
+        <if test="userAccount != null">
+            AND u.user_account LIKE CONCAT('%', #{userAccount}, '%')
+        </if>
+        <if test="roleName != null">
+            AND role.role_name LIKE CONCAT('%', #{roleName}, '%')
+        </if>
+    </select>
+
+    <!--  根据账号信息查询用户身份、用户身份路由  -->
+    <select id="selectUserById" resultType="com.lw.swTest.sy.entity.SyUser">
+        SELECT
+            ur.id as syUserRole,
+            role.id as roleId,
+            role.role_code as roleCode,
+            role.role_name as roleName,
+            syd.dict_content,
+            user.*
+        FROM sy_user_role ur
+        JOIN sy_user user
+        ON ur.user_id = user.id
+        JOIN sy_role role
+        ON ur.role_id = role.id
+        JOIN sy_dict syd
+        ON user.dict_id=syd.id
+        WHERE user.delete_flag = 0 AND user.id = #{userId}
+    </select>
+
+    <update id="updateUser" parameterType="com.lw.swTest.sy.entity.SyUser">
+        update sy_user
+        set sy_user.user_name=#{userName},
+            sy_user.user_account=#{userAccount},
+            sy_user.user_password=#{userPassword},
+            sy_user.dict_id=(select sy_dict.id from sy_dict where sy_dict.dict_content=#{dictId} ),
+            sy_user.user_phone_number=#{userPhoneNumber},
+            sy_user.user_avatar=#{userAvatar},
+            sy_user.salt=#{salt}
+        where sy_user.id = #{id} and sy_user.delete_flag=0
+    </update>
+
+    <insert id="insertUser" parameterType="com.lw.swTest.sy.entity.SyUser">
+        insert into sy_user (user_name,user_account,user_password,user_avatar,user_phone_number,dict_id,salt)
+        values (#{userName},#{userAccount},#{userPassword},#{userAvatar},#{userPhoneNumber},(select sy_dict.id from sy_dict where sy_dict.dict_content=#{dictId} ),#{salt})
+    </insert>
+
+    <update id="upUserIp" parameterType="com.lw.swTest.sy.entity.SyUser">
+        update sy_user set sy_user.ipv=#{ipv},sy_user.path=#{path} where sy_user.id = #{userId} and sy_user.delete_flag=0
+    </update>
+
+    <select id="selectByUserIp" resultType="com.lw.swTest.sy.entity.SyUser">
+        SELECT *
+        FROM sy_user
+        WHERE sy_user.delete_flag = 0
+          AND sy_user.ipv = #{ipv}
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsCaseMapper">
+    <!--  根据名称查询测试用例信息  -->
+    <select id="selectCaseName" resultType="com.lw.swTest.ts.entity.TsCase">
+        SELECT *
+        FROM ts_case
+        WHERE ts_case.delete_flag = 0
+          AND ts_case.case_name = #{caseName}
+    </select>
+
+    <!-- 分页查询测试用例信息 -->
+    <select id="pageCase" resultType="com.lw.swTest.ts.entity.TsCase">
+        SELECT *
+        FROM ts_case
+        WHERE ts_case.delete_flag = 0
+        <if test="caseName != null">
+            AND ts_case.case_name LIKE CONCAT('%', #{caseName}, '%')
+        </if>
+    </select>
+
+    <!-- 分页查询测试用例信息 -->
+    <select id="selectCaseBySectionId" resultType="com.lw.swTest.ts.entity.TsCase">
+        SELECT *
+        FROM ts_case
+        WHERE ts_case.delete_flag = 0 AND ts_case.section_id = #{sectionId}
+    </select>
+</mapper>

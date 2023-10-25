@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyRouteMapper">
+    <!--  根据名称查询路由信息  -->
+    <select id="selectRouteLabel" resultType="com.lw.swTest.sy.entity.SyRoute">
+        SELECT *
+        FROM sy_route
+        WHERE sy_route.delete_flag = 0
+          AND sy_route.route_label = #{routeLabel}
+    </select>
+
+    <!-- 分页查询路由信息 -->
+    <select id="pageRoute" resultType="com.lw.swTest.sy.entity.SyRoute">
+        SELECT *
+        FROM sy_route
+        WHERE sy_route.delete_flag = 0
+        <if test="routeLabel != null">
+            AND sy_route.route_label LIKE CONCAT('%', #{routeLabel}, '%')
+        </if>
+    </select>
+</mapper>

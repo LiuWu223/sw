@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.tol.mapper.TolGitMapper">
+    <!--  根据名称查询git信息  -->
+    <select id="selectGitName" resultType="com.lw.swTest.tol.entity.TolGit">
+        SELECT *
+        FROM tol_git
+        WHERE tol_git.delete_flag = 0
+          AND tol_git.git_name = #{gitName}
+    </select>
+
+    <!-- 分页查询git信息 -->
+    <select id="pageGit" resultType="com.lw.swTest.tol.entity.TolGit">
+        SELECT *
+        FROM tol_git
+        WHERE tol_git.delete_flag = 0
+        <if test="gitName != null">
+            AND tol_git.git_name LIKE CONCAT('%', #{gitName}, '%')
+        </if>
+    </select>
+</mapper>

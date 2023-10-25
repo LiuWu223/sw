@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyRoleRouteMapper">
+    <!-- 分页查询角色路由信息 -->
+    <select id="pageRoleRoute" resultType="com.lw.swTest.sy.entity.SyRoleRoute">
+        SELECT
+        rr.id, rr.role_id, rr.route_id, rol.role_name, rou.route_label,rou.route_component,rou.route_name,rou.route_path,rou.route_higher,rou.route_hidden,rr.create_time,rr.create_by,rr.update_time,rr.update_by,rr.delete_flag
+        FROM
+        sy_role rol
+        JOIN
+        sy_role_route rr
+        ON
+        rr.role_id=rol.id
+        JOIN
+        sy_route rou
+        ON
+        rr.route_id=rou.id
+        WHERE
+        rr.delete_flag=0
+        AND
+        rol.delete_flag=0
+        AND
+        rou.delete_flag=0
+        <if test="routeLabel != null">
+            AND rou.route_label LIKE CONCAT('%', #{routeLabel}, '%')
+        </if>
+        <if test="roleName != null">
+            AND rol.role_name LIKE CONCAT('%', #{roleName}, '%')
+        </if>
+    </select>
+
+    <!--  根据角色ID查询路由信息  -->
+    <select id="selectRoleIdByRoute" resultType="com.lw.swTest.sy.entity.SyRoleRoute">
+        SELECT rr.route_id,
+               route.route_label,
+               route.route_component,
+               route.route_name,
+               route.route_path,
+               route.route_higher,
+               route.route_icon,
+               route.route_hidden
+        FROM sy_role_route rr
+        JOIN sy_role role
+        ON rr.role_id=role.id
+        JOIN sy_route route
+        ON rr.route_id=route.id
+        WHERE rr.delete_flag=0 AND role.id=#{roleId}
+    </select>
+</mapper>

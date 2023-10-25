@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsProjectMapper">
+    <!-- 分页查询测试用例信息 -->
+    <select id="pageProject" resultType="com.lw.swTest.ts.entity.TsProject">
+        SELECT *
+        FROM ts_project
+        WHERE ts_project.delete_flag = 0
+        <if test="projectName != null">
+            AND ts_project.project_name LIKE CONCAT('%', #{projectName}, '%')
+        </if>
+    </select>
+
+    <!-- 分页查询测试用例信息 -->
+    <select id="selectProjectByNameAndUserId" resultType="com.lw.swTest.ts.entity.TsProject">
+        SELECT *
+        FROM ts_project as tp
+        WHERE tp.delete_flag = 0
+          AND tp.project_name=#{projectName}
+        AND (SELECT tup.user_id FROM ts_user_project as tup WHERE tup.project_id = tp.id) = #{userId}
+    </select>
+
+    <!-- 分页查询测试用例信息 -->
+    <select id="selectProjectByName" resultType="com.lw.swTest.ts.entity.TsProject">
+        SELECT *
+        FROM ts_project as tp
+        WHERE tp.delete_flag = 0
+          AND tp.project_name=#{projectName}
+    </select>
+</mapper>

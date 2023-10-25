@@ -1,0 +1,335 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+    <!-- 本项目信息 -->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.lw</groupId>
+    <artifactId>auto-sw-admin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>auto-sw-admin Maven Webapp</name>
+    <url>https://maven.apache.org</url>
+    <!-- 项目属性和版本信息配置 -->
+    <properties>
+        <!-- 设置编码的编码格式 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 配置项目的JDK源构建版本 -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <!-- 配置项目的JDK目标构建版本 -->
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- mysql连接包版本信息 -->
+        <com.mysql.mysql-connector-j.vision>8.0.31</com.mysql.mysql-connector-j.vision>
+        <!-- 阿里巴巴连接池包版本信息 -->
+        <com.alibaba.druid.vision>1.2.14</com.alibaba.druid.vision>
+        <!-- Spring框架相关包版本信息 -->
+        <org.springframework.vision>5.3.23</org.springframework.vision>
+        <!-- controller返回JSON格式数据转换包版本信息 -->
+        <com.fasterxml.jackson.core.jackson-databind.vision>2.14.0</com.fasterxml.jackson.core.jackson-databind.vision>
+        <!-- 文件上传包版本信息 -->
+        <commons-fileupload.vision>1.4</commons-fileupload.vision>
+        <!-- 文件操作IO包版本信息 -->
+        <commons-io.commons-io.version>2.11.0</commons-io.commons-io.version>
+        <!-- 日志打印包版本信息 -->
+        <org.slf4j.slf4j-api.vision>2.0.4</org.slf4j.slf4j-api.vision>
+        <!-- log4j日志打印核心包版本信息 -->
+        <log4j.log4j.vision>1.2.17</log4j.log4j.vision>
+        <!-- java工具包版本信息 -->
+        <cn.hutool.hutool-all.vision>5.8.10</cn.hutool.hutool-all.vision>
+        <!-- mybatis代码生成核心包版本信息 -->
+        <org.mybatis.generator.mybatis-generator-core.vision>1.4.1</org.mybatis.generator.mybatis-generator-core.vision>
+        <!-- Mybatis Plus 代码生成器包版本信息 -->
+        <com.baomidou.mybatis-plus-generator.vision>3.5.3</com.baomidou.mybatis-plus-generator.vision>
+        <!-- 代码生成模板包版本信息 -->
+        <org.freemarker.freemarker.vision>2.3.31</org.freemarker.freemarker.vision>
+        <!-- lombok省略get、set方法包版本信息 -->
+        <org.projectlombok.lombok.vision>1.18.24</org.projectlombok.lombok.vision>
+        <!-- Mybatis-Plus 核心包版本信息 -->
+        <com.baomidou.mybatis-plus.vision>3.5.2</com.baomidou.mybatis-plus.vision>
+        <!-- Excel操作相关包版本信息 -->
+        <org.apache.poi.version>5.2.3</org.apache.poi.version>
+        <!-- Tomcat的servlet-api工具包版本信息 -->
+        <javax.servlet.javax.servlet-api.version>4.0.1</javax.servlet.javax.servlet-api.version>
+        <!-- junit测试包版本信息 -->
+        <junit.junit.version>4.13.2</junit.junit.version>
+        <!-- swagger2接口文档包版本信息 -->
+        <io.springfox.springfox-swagger2.vision>3.0.0</io.springfox.springfox-swagger2.vision>
+        <!-- swagger2接口文档增强包版本信息 -->
+        <com.github.xiaoymin.knife4j-spring-boot-starter.vision>3.0.3</com.github.xiaoymin.knife4j-spring-boot-starter.vision>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <!-- 本项目依赖包 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.3.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- 引入mysql连接包 -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${com.mysql.mysql-connector-j.vision}</version>
+        </dependency>
+        <!-- 阿里巴巴连接池包 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${com.alibaba.druid.vision}</version>
+        </dependency>
+        <!-- SpringMVC相关包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework.vision}</version>
+        </dependency>
+        <!-- SpringJDBC连接包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${org.springframework.vision}</version>
+        </dependency>
+        <!-- Spring事务相关包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${org.springframework.vision}</version>
+        </dependency>
+        <!-- Mybatis-Plus 核心包 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <version>${com.baomidou.mybatis-plus.vision}</version>
+        </dependency>
+        <!-- mybatis代码生成核心包 -->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <version>${org.mybatis.generator.mybatis-generator-core.vision}</version>
+        </dependency>
+        <!-- Mybatis Plus 代码生成器包 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${com.baomidou.mybatis-plus-generator.vision}</version>
+        </dependency>
+        <!-- 代码生成模板 -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${org.freemarker.freemarker.vision}</version>
+        </dependency>
+        <!-- controller返回JSON格式数据转换包 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.core.jackson-databind.vision}</version>
+        </dependency>
+        <!-- 文件上传相关包 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.vision}</version>
+        </dependency>
+        <!-- 文件操作IO包 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.commons-io.version}</version>
+        </dependency>
+        <!-- slf4j-api日志打印包 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.slf4j-api.vision}</version>
+        </dependency>
+        <!-- slf4j-log4j12日志打印相关包 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${org.slf4j.slf4j-api.vision}</version>
+        </dependency>
+        <!-- log4j日志打印相关包 -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.log4j.vision}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+        <!-- localDateTime 日期转换包 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${com.fasterxml.jackson.core.jackson-databind.vision}</version>
+        </dependency>
+        <!-- java工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${cn.hutool.hutool-all.vision}</version>
+        </dependency>
+        <!-- lombok省略get、set方法包 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${org.projectlombok.lombok.vision}</version>
+        </dependency>
+        <!-- Tomcat的servlet-api工具包 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet.javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 导出Excel相关包 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${org.apache.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${org.apache.poi.version}</version>
+        </dependency>
+        <!-- spring-test测试包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.vision}</version>
+        </dependency>
+        <!-- junit测试包 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>10.1.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-models</artifactId>-->
+<!--            <version>1.5.22</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>2.4.8</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--    swagger2    -->
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger2</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger-ui</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--        </dependency>-->
+        <!-- swagger2接口文档包 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${io.springfox.springfox-swagger2.vision}</version>
+        </dependency>
+        <!-- swagger2接口文档UI包 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${io.springfox.springfox-swagger2.vision}</version>
+        </dependency>
+        <!-- swagger2接口文档UI增强包 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${com.github.xiaoymin.knife4j-spring-boot-starter.vision}</version>
+        </dependency>
+    </dependencies>
+    <!-- 项目构建 -->
+    <build>
+        <!-- 项目名称 -->
+        <finalName>auto-sw-admin</finalName>
+        <!-- 项目打包配置把src/main/java和src/main/resources目录下后缀名为：.properties和.xml的文件打包上 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <!-- maven 插件配置 -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

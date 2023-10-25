@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyDictMapper">
+    <!--  根据类型查询字典信息  -->
+    <select id="selectDictType" resultType="com.lw.swTest.sy.entity.SyDict">
+        SELECT *
+        FROM sy_dict
+        WHERE sy_dict.delete_flag = 0
+          AND sy_dict.dict_type = #{dictType}
+    </select>
+
+    <!-- 分页查询字典信息 -->
+    <select id="pageDict" resultType="com.lw.swTest.sy.entity.SyDict">
+        SELECT *
+        FROM sy_dict
+        WHERE sy_dict.delete_flag = 0
+        <if test="dictType != null">
+            AND sy_dict.dict_type LIKE CONCAT('%', #{dictType}, '%')
+        </if>
+    </select>
+
+    <!-- 分页查询字典信息 -->
+    <select id="selectDict" resultType="com.lw.swTest.sy.entity.SyDict">
+        SELECT *
+        FROM sy_dict
+        WHERE sy_dict.delete_flag = 0
+        AND sy_dict.dict_content LIKE CONCAT(#{dictContent})
+    </select>
+</mapper>

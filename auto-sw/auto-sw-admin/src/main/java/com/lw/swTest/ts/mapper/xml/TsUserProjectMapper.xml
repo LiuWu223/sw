@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.ts.mapper.TsUserProjectMapper">
+    <!-- 分页查询用户项目信息 -->
+    <select id="pageUserProject" resultType="com.lw.swTest.ts.entity.TsUserProject">
+        SELECT *
+        FROM ts_user_project
+        WHERE ts_user_project.delete_flag = 0
+    </select>
+    <!--  查询用户项目  -->
+    <select id="selectProjectByUserId" resultType="com.lw.swTest.ts.entity.TsUserProject">
+        SELECT tup.id,tup.user_id,tup.project_id,tp.project_name,tp.project_refer,tup.create_time,tup.create_by,tup.update_time,tup.update_by,tup.delete_flag
+        FROM ts_user_project as tup
+        JOIN ts_project as tp
+        ON tup.project_id = tp.id
+        JOIN sy_user as  su
+        ON tup.user_id = su.id
+        WHERE tup.delete_flag = 0
+          AND tup.user_id = #{userId}
+    </select>
+
+    <update id="removeUserProjectByProjectId" parameterType="com.lw.swTest.ts.entity.TsUserProject">
+        update ts_user_project
+        set ts_user_project.delete_flag=1
+        where ts_user_project.project_id=#{projectId}
+    </update>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.swTest.sy.mapper.SyAuthorityMapper">
+    <!--  根据名称查询权限信息  -->
+    <select id="selectAuthorityName" resultType="com.lw.swTest.sy.entity.SyAuthority">
+        SELECT *
+        FROM sy_authority
+        WHERE sy_authority.delete_flag = 0
+          AND sy_authority.authority_name = #{authorityName}
+    </select>
+
+    <!-- 分页查询权限信息 -->
+    <select id="pageAuthority" resultType="com.lw.swTest.sy.entity.SyAuthority">
+        SELECT a.*,d.dict_content
+        FROM sy_authority a
+        JOIN sy_dict d
+        ON a.dict_id=d.id
+        WHERE a.delete_flag = 0
+        <if test="authorityName != null">
+            AND a.authority_name LIKE CONCAT('%', #{authorityName}, '%')
+        </if>
+    </select>
+</mapper>
