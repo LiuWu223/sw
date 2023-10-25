@@ -6,7 +6,6 @@ import com.lw.swTest.core.enums.ResponseCodeEnum;
 import com.lw.swTest.core.result.ResponseResult;
 import com.lw.swTest.sy.entity.SyRole;
 import com.lw.swTest.sy.service.ISyRoleService;
-import com.lw.swTest.system.entity.SystemRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;

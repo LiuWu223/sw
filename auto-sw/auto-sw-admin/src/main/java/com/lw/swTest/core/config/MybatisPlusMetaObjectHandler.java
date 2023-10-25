@@ -3,7 +3,7 @@ package com.lw.swTest.core.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.lw.swTest.core.statics.GlobalStaticVariable;
 import com.lw.swTest.core.utils.JsonWebTokenUtil;
-import com.lw.swTest.system.entity.SystemUser;
+import com.lw.swTest.sy.entity.SyUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -11,7 +11,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * MybatisPlus新增修改全局填充
@@ -35,7 +34,7 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
             this.strictInsertFill(metaObject, "deleteFlag", () -> false, Boolean.class);
         } else {
-            SystemUser systemUser = JsonWebTokenUtil.parseTokenUser(token);
+            SyUser systemUser = JsonWebTokenUtil.parseTokenUser(token);
             String un = systemUser.getUserName();
             this.setFieldValByName("createTime", LocalDateTime.now(),metaObject);
             this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
@@ -53,7 +52,7 @@ public class MybatisPlusMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token = request.getHeader(GlobalStaticVariable.AUTHORIZATION);
-        SystemUser systemUser = JsonWebTokenUtil.parseTokenUser(token);
+        SyUser systemUser = JsonWebTokenUtil.parseTokenUser(token);
         String un = systemUser.getUserName();
         this.setFieldValByName("updateTime", LocalDateTime.now(),metaObject);
         this.setFieldValByName("updateBy", un, metaObject);

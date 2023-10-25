@@ -5,8 +5,6 @@ import com.lw.swTest.sy.entity.SyUser;
 import com.lw.swTest.sy.mapper.SyUserMapper;
 import com.lw.swTest.sy.service.ISyUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lw.swTest.system.entity.SystemUser;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

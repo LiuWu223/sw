@@ -4,7 +4,7 @@ import cn.hutool.json.JSONUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.lw.swTest.core.statics.GlobalStaticVariable;
-import com.lw.swTest.system.entity.SystemUser;
+import com.lw.swTest.sy.entity.SyUser;
 
 public class JsonWebTokenUtil {
 
@@ -13,11 +13,11 @@ public class JsonWebTokenUtil {
      * @param token token
      * @return
      */
-    public static SystemUser parseTokenUser (String token) {
+    public static SyUser parseTokenUser (String token) {
         JWT jwt = JWTUtil.parseToken(token);
         // 解析token里面的用户信息
         Object object = jwt.getPayload(GlobalStaticVariable.QUESTION_USER);
-        return JSONUtil.toBean(JSONUtil.toJsonStr(object), SystemUser.class);
+        return JSONUtil.toBean(JSONUtil.toJsonStr(object), SyUser.class);
     }
 
 }

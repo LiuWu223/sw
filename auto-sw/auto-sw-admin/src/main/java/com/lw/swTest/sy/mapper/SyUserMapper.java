@@ -3,7 +3,6 @@ package com.lw.swTest.sy.mapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lw.swTest.sy.entity.SyUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lw.swTest.system.entity.SystemUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
